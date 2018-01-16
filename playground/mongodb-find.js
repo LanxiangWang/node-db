@@ -26,12 +26,14 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   //   console.log('Unable to fetch todos. Error Message: ', err);
   // });
 
-  db.collection('Users').find({name: 'Lanxiang'}).count().then((res) => {
-    console.log(`${res} result(s) found`);
-    return db.collection('Users').find({name: 'Lanxiang'}).toArray();
-  }).then((res) => {
-    console.log(JSON.stringify(res, undefined, 2));
-  });
+  // db.collection('Users').find({name: 'Lanxiang'}).count().then((res) => {
+  //   console.log(`${res} result(s) found`);
+  //   return db.collection('Users').find({name: 'Lanxiang'}).toArray();
+  // }).then((res) => {
+  //   console.log(JSON.stringify(res, undefined, 2));
+  // });
+
+
 
   // db.collection('Users').find({name: 'Lanxiang'}).toArray().then((res) => {
   //   var num = db.collection('Users').find({name: 'Lanxiang'}).count();
