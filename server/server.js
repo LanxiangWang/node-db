@@ -61,6 +61,30 @@ app.get('/todos/:id', (req, res) => {
 
 });
 
+app.delete('/todos/:id', (req, res) => {
+  // get id
+  var id = req.params.id;
+  // validate id -> ?not return 404
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send('Id format is incorrect.');
+  }
+  // remove todo by id
+  Todo.findByIdAndRemove(id).then((doc) => {
+    if (!doc) {
+      res.status(404).send('No matching todo with this id.');
+    }
+    res.send(doc);
+  }, (err) => {
+    res.status(400).send('Something wrong with MongoDB');
+  });
+    // success 
+      // if no doc, send 404
+
+    // error -> 400 with empty body
+
+
+});
+
   
 
   // res.send(Todo.find().then((res) => {
