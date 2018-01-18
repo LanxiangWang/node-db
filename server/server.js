@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-
+var {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {Users} = require('./models/user');
@@ -32,6 +32,32 @@ app.get('/todos', (req, res) => {
   }, (err) => {
     res.send('Unable to connect to MongoDB.', err);
   });
+});
+
+// GET /todos/:id
+app.get('/todos/:id', (req, res) => {
+  var id = req.params.id;
+
+  // validate id using isValid
+  if (!ObjectID.isValid(id)) {
+    // 404 -send back empty send
+    res.status(404).send('This is an incorrect id.');
+  }
+  
+  Todo.findById(id).then((todo) => {
+    if (!todo) {
+      res.status(404).send('No todo with this id found');
+    }
+
+    res.send(todo);
+  }).catch((e) => {
+    res.status(400).send();
+  });
+  // query by findById
+    // success
+    // error - 400 send back nothing
+
+});
 
   
 
@@ -43,7 +69,7 @@ app.get('/todos', (req, res) => {
   // }, (err) => {
   //   res.status(400).send(err);
   // }));
-});
+// });
 
 
 
