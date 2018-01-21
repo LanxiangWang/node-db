@@ -76,11 +76,33 @@ UserSchema.methods.generateAuthToken = function() {
 
 // overwrite function
 UserSchema.methods.toJSON = function() {
+  // instance method use 'this' to indicate individula document
   var user = this;
   // toObject() only converts property to object
   var userObject = user.toObject();
 
   return _.pick(userObject, ['_id', 'email']);
+}
+
+// model function
+UserSchema.statics.findByToken = function (token) {
+  // model method uses 'this' to indicate the whole model
+  var Users = this;
+  var decoded;
+
+  try {
+    decoded = jwt.verify(token, 'abc123');
+  } catch(e) {
+    return Promise.reject();
+    // or
+    // return Promise.reject();
+  }
+
+  return Users.findOne({
+    _id: decoded._id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
+  })
 }
 
 var Users = mongoose.model('Users', UserSchema);

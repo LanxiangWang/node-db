@@ -7,6 +7,7 @@ var {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {Users} = require('./models/user');
+var {authenticate} = require('./middleware/authenticate');
 
 
 var app = express();
@@ -141,6 +142,12 @@ app.patch('/todos/:id', (req, res) => {
 // });
 
 
+
+app.get('/users/me', authenticate, (req, res) => {
+  
+  res.send(req.user);
+
+});
 
 
 
