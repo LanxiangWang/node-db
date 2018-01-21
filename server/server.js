@@ -29,6 +29,26 @@ app.post('/todos', (req, res) => {
   });
 });
 
+// POST /users
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password', 'first_name', 'last_name']);
+  var user = new Users(body);
+  console.log('start post');
+  user.save().then((user) => {
+    // res.send(typeof user);
+    console.log(typeof user);
+    console.log('user.save()123');
+
+    return user.generateAuthToken();
+  }).then((token) => {
+    console.log('user.save().then().then() and token is: ', token);
+    res.header('x-auth', token).send(user);
+  }).catch((e) => {
+    res.status(400).send(e);
+  });
+  console.log('end post');
+});
+
 app.get('/todos', (req, res) => {
 
   Todo.find().then((todos) => {
