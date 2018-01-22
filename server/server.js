@@ -101,7 +101,10 @@ app.post('/users/login', (req, res) => {
 
   Users.findByEmail(email, password).then((user) => {
     // user found
-    res.send(user);
+    // res.send(user);
+    user.generateAuthToken().then((token) => {
+      res.header('x-auth', token).send(user);
+    })
   }).catch((e) => {
     if (e === 'password') {
       res.status(401).send('Password incorrect');  
@@ -115,6 +118,14 @@ app.post('/users/login', (req, res) => {
   console.log('end of post');
 
 
+});
+
+app.delete('/users/me/token', authenticate, (req, res) => {
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
+    res.status(400).send();
+  });
 });
 
 
@@ -167,6 +178,8 @@ app.patch('/todos/:id', (req, res) => {
     res.status(400).send();
   });
 });
+
+
   
 
   // res.send(Todo.find().then((res) => {
