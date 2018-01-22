@@ -84,6 +84,44 @@ app.get('/todos/:id', (req, res) => {
 
 });
 
+// POST /users/login
+app.post('/users/login', (req, res) => {
+  // find user
+  var email = req.body.email;
+  var password = req.body.password;
+
+  // User.findByEmail(email, password).then((user) => {
+
+  // }).catch((e) => {
+
+  // });
+
+
+
+
+  Users.findByEmail(email, password).then((user) => {
+    // user found
+    res.send(user);
+  }).catch((e) => {
+    if (e === 'password') {
+      res.status(401).send('Password incorrect');  
+    }
+    else {
+      res.status(404).send('User not found');
+    }
+    
+  });
+
+  console.log('end of post');
+
+
+});
+
+
+
+
+
+
 app.delete('/todos/:id', (req, res) => {
   // get id
   var id = req.params.id;
